@@ -26,3 +26,4 @@ function render(){
 if(document.documentElement.classList.contains('lg-refract'))buildLensMap();
 window.addEventListener('keydown',e=>{if(e.key==='Escape'&&modalName&&!['vote','consent','reveal'].includes(modalName))closeModal();});
 render();
+startTour(); // guided tour on every visit

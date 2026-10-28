@@ -37,6 +37,6 @@ const FEATURES={
 };
 function mapPage(){
   const desc={must:'The product fails without these.',should:'Important, with a workaround.',could:'Added if time allows.',wont:'Left out because they conflict with the purpose.'};
-  return `<main class="page shell"><div class="page-top"><div><div class="kicker">MoSCoW prioritization · v3</div><h2>Feature map</h2><p class="page-sub">Every feature in the prototype and where to find it. Tap “Show me” to jump to each one.</p></div></div>
+  return `<main class="page shell"><div class="page-top"><div><div class="kicker">MoSCoW prioritization · v3</div><h2>Feature map</h2><p class="page-sub">Every feature in the prototype and where to find it. Tap “Show me” to jump to each one.</p></div>${btn('Replay the tour','startTour()','btn-light')}</div>
   <div class="map">${Object.keys(FEATURES).map(k=>`<section class="col-card"><h3>${TIERS[k]} have</h3><p>${desc[k]}</p>${FEATURES[k].map(f=>`<div class="fitem"><b>${f[0]}</b><small>${f[1]}</small>${f[2]?`<button class="btn btn-light btn-sm" onclick="${f[2]}">Show me</button>`:''}</div>`).join('')}</section>`).join('')}</div></main>`;
 }

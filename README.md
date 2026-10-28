@@ -31,12 +31,14 @@ css/                Loaded in order; later files deliberately override earlier o
   rooms-v3.css        Focus room and study session screens, consent sheet
   glass.css           v3.3 liquid-glass material, floating tab bar
   controls.css        v3.4 single control style
+  tour.css            Guided tour spotlight and card
 js/                 Plain scripts sharing one global scope (inline onclick handlers rely on it)
   core/               glass refraction, icons, sample data and state, helpers, activity tracking, sound
   nav.js              Navigation, return chip, sign-in gate
   views/              welcome, room lists, log, Plus, feature map, outcome
   session/            joining, shared desk/panel pieces, focus room, study session, phases, per-second updates
   modals/             modal templates (render.js) and their actions (actions.js)
+  tour.js             Guided tour shown on every visit (styles in css/tour.css); replay it from the feature map
   main.js             Clock, top-level render(), boot. Must stay the last script
 ```
 
