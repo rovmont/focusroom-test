@@ -1,0 +1,57 @@
+/* ---------- v3.4: one control style, no hard outlines ----------
+   Every button and chip is a borderless tinted pane. Selection = more tint + lift, never a stroke.
+   Same press (spring scale) and hover (soft lift) everywhere. */
+.btn,.fchip,.choice,.pick,.react-grid button,.acc-pick button,.seg,.res,.qlist li,.stepper>button:not(.btn),.tab,.chip,.field,.desk,.proof,.res-chip,.now-speaking,.task-banner,.checkline,.tip,.consent section,.drop,.test-tools,.room.waiting{border:0!important}
+.btn{box-shadow:inset 0 0 0 .5px rgba(255,255,255,.22),0 1px 2px rgba(15,59,41,.06);transition:transform .45s var(--spring),background .2s,box-shadow .25s}
+.btn:hover:not(:disabled){box-shadow:inset 0 0 0 .5px rgba(255,255,255,.3),0 6px 16px rgba(15,59,41,.14)}
+.btn:active:not(:disabled){transform:scale(.95)}
+.btn-primary,.btn-dark{background:rgba(18,122,80,.92);color:#fff}
+.btn-primary:hover:not(:disabled),.btn-dark:hover:not(:disabled){background:rgba(14,104,67,.95)}
+.btn-light,.btn-outline{background:rgba(15,110,72,.09);color:var(--forest)}
+.btn-light:hover:not(:disabled),.btn-outline:hover:not(:disabled){background:rgba(15,110,72,.14)}
+.btn-danger{background:rgba(161,46,56,.09);color:#8f2530}
+.btn-danger:hover:not(:disabled){background:rgba(161,46,56,.14)}
+.btn-gold{background:rgba(201,143,34,.15);color:#6b4908}
+.hero .btn-outline{background:rgba(255,255,255,.16);color:#fff;backdrop-filter:blur(12px) saturate(160%);-webkit-backdrop-filter:blur(12px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.28)}
+.hero .btn-outline:hover:not(:disabled){background:rgba(255,255,255,.22)}
+.track-pill,.track-pill.paused{border:0}
+
+/* chips, choices, tabs: tinted panes; selected = deeper tint + lift */
+.fchip,.choice,.pick,.react-grid button,.acc-pick button,.res,.qlist li,.stepper>button:not(.btn),.tab{background:rgba(255,255,255,.66);box-shadow:0 1px 2px rgba(15,59,41,.05),0 4px 14px rgba(15,59,41,.05);transition:transform .45s var(--spring),background .2s,box-shadow .25s}
+.fchip:hover,.choice:hover,.pick:hover,.react-grid button:hover,.acc-pick button:hover,.tab:hover,.stepper>button:not(.btn):hover{background:rgba(255,255,255,.88);box-shadow:0 1px 2px rgba(15,59,41,.05),0 8px 20px rgba(15,59,41,.09)}
+.fchip:active,.choice:active,.pick:active,.react-grid button:active,.acc-pick button:active,.tab:active,.stepper>button:not(.btn):active,.desk.clickable:active{transform:scale(.95)}
+.fchip.on{background:rgba(18,122,80,.92);color:#fff;box-shadow:0 4px 14px rgba(18,122,80,.25)}
+.choice.selected,.pick.selected,.acc-pick button.on{background:rgba(31,158,108,.16);color:var(--forest);box-shadow:0 6px 18px rgba(31,158,108,.18)}
+.tab{opacity:.8}
+.tab.on{opacity:1;background:rgba(255,255,255,.95);box-shadow:0 2px 4px rgba(15,59,41,.05),0 14px 32px rgba(15,59,41,.14)}
+.tab.on b{color:var(--forest)}
+.seg{background:rgba(15,110,72,.07);box-shadow:none}
+.chip{background:rgba(15,110,72,.07)}
+.chip.tag{background:rgba(255,255,255,.75);box-shadow:0 1px 3px rgba(15,59,41,.06)}
+.field{background:rgba(255,255,255,.8);box-shadow:inset 0 0 0 1px rgba(15,59,41,.08),inset 0 1px 2px rgba(15,59,41,.05)}
+.field:focus{box-shadow:inset 0 0 0 2px rgba(31,158,108,.55)}
+.field.err{box-shadow:inset 0 0 0 2px rgba(161,46,56,.55)}
+.proof{background:rgba(31,158,108,.12)}
+.qlist li.you{background:rgba(63,104,194,.12)}
+.desk{background:rgba(255,255,255,.62);box-shadow:0 1px 2px rgba(15,59,41,.04),0 6px 16px rgba(15,59,41,.05)}
+.desk.clickable:hover{background:rgba(255,255,255,.85)}
+.desk.you{background:rgba(225,244,234,.85);box-shadow:0 8px 22px rgba(31,158,108,.16)}
+.desk.left{background:rgba(255,255,255,.35);box-shadow:none}
+.room.waiting{background:rgba(255,255,255,.48)}
+.consent section{background:rgba(15,110,72,.05)}
+.consent section.never{background:rgba(161,46,56,.06)}
+.tip,.task-banner,.checkline,.drop,.test-tools{background:rgba(15,110,72,.05)}
+.tip.wont{background:rgba(161,46,56,.05)}
+.now-speaking{background:rgba(63,104,194,.1)}.now-speaking.empty{background:rgba(15,110,72,.05)}
+
+/* hero preview: whiter, and the task card floats above it */
+.preview-card{--pane:rgba(255,255,255,.95)}
+.preview-task{border:0;background:#fff;box-shadow:0 2px 6px rgba(15,59,41,.06),0 16px 36px rgba(15,59,41,.18);transform:translateY(-4px)}
+
+/* verified card + create button share one size */
+.top-actions{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+.top-actions>.mini-card,.top-actions>.btn{border-radius:14px;min-height:62px;margin:0}
+.top-actions>.btn{padding:0 22px}
+.sr-file{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.sr-file:focus-visible+label{outline:3px solid var(--mint);outline-offset:3px}
+[hidden]{display:none!important}

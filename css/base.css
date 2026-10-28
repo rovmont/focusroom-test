@@ -1,0 +1,54 @@
+/* Layout: intro room lists (two tabs) separate Focus room and Study session screens results reveal log. Logo green. Deliberately light-only. */
+:root{
+  color-scheme:light;
+  --bg:#f3f7f4;--card:#ffffff;--ink:#1c3328;--muted:#5f766a;--faint:#8a9d93;--border:#dbe7e0;--line:#e9f0ec;
+  --forest:#0f3b29;--forest2:#175439;--accent:#1f9e6c;--accent-hover:#28b37c;--accent-ink:#05301e;--accent-bg:#e1f4ea;--mint:#a6e3c7;
+  --gold:#c98f22;--gold-bg:#fbf0d9;--gold-ink:#7d560c;
+  --blue:#3f68c2;--blue-bg:#e7eefb;--blue-ink:#2b4c94;
+  --danger:#a12e38;--danger-bg:#fdebea;--soft:#eef4f0;--screen:#10241b;--screen-ink:#d6eee2;
+  --shadow:0 14px 45px rgba(15,59,41,.08);
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:var(--bg);font:15px/1.5 var(--sans)}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
+a{color:var(--forest2)}
+h1,h2,h3{text-wrap:balance}
+.shell{max-width:1224px;margin:0 auto;padding-left:max(28px,env(safe-area-inset-left,0px));padding-right:max(28px,env(safe-area-inset-right,0px))}
+
+/* header */
+.site-header{background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--card)}
+.nav{min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding-block:10px}
+.brand{display:flex;align-items:center;gap:11px;color:var(--forest);font-size:20px;font-weight:850;letter-spacing:-.6px;cursor:pointer;border:0;background:none;padding:0}
+.brand img{width:40px;height:40px;display:block}
+.brand .dot{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.nav-link{border:0;background:transparent;color:var(--muted);padding:9px 10px;font-weight:750;border-radius:10px;font-size:14px}
+.nav-link:hover{color:var(--forest2);background:var(--soft)}
+.nav-link.on{color:var(--forest);background:var(--accent-bg)}
+.tier-toggle{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);font-weight:700;padding:6px 10px;border:1px solid var(--border);border-radius:999px;margin-left:6px;cursor:pointer;user-select:none}
+.tier-toggle input{accent-color:var(--accent);margin:0}
+
+/* buttons */
+.btn{border:0;border-radius:12px;padding:12px 20px;font-size:13px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s,background .15s;text-decoration:none}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}.btn-primary:hover{background:var(--accent-hover)}
+.btn-dark{background:var(--forest);color:#fff}
+.btn-light{background:var(--soft);color:var(--forest2)}
+.btn-outline{background:var(--card);color:var(--ink);border:1px solid var(--border)}
+.btn-danger{background:var(--danger-bg);color:var(--danger)}
+.btn-gold{background:var(--gold-bg);color:var(--gold-ink)}
+.btn-sm{padding:8px 12px;font-size:12px;border-radius:10px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+/* MoSCoW tags */
+.tier{display:inline-flex;align-items:center;font-size:9px;font-weight:900;letter-spacing:.9px;padding:3px 7px;border-radius:999px;text-transform:uppercase;vertical-align:middle;white-space:nowrap;line-height:1.3}
+.t-must{background:var(--forest);color:#fff}
+.t-should{background:var(--blue-bg);color:var(--blue-ink)}
+.t-could{background:var(--gold-bg);color:var(--gold-ink)}
+.t-wont{background:var(--danger-bg);color:var(--danger)}
+body.hide-tiers .tier{display:none}
