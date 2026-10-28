@@ -11,7 +11,9 @@ const TOUR=[
  {sel:'.phase-bar',title:'One shared rhythm',text:'Inside a focus room, everyone sprints and breaks at the same time, and late joiners finish with the group. The room goal counts the tasks the whole room has finished.',show:()=>tourRoom('a')},
  {sel:'#desks',title:'Seen working, not watched',text:"Every desk shows a classmate's task, their progress, and whether they're typing, using the cursor, idle, or away. Tap a desk to send a silent reaction. There's no chat.",show:()=>tourRoom('a')},
  {sel:'#trackPill',title:'Activity tracking',text:"Tracking only notes that you typed or moved your cursor, never what you typed or what's on your screen. It pauses during breaks. Tap it any time to see exactly what's tracked.",show:()=>tourRoom('a')},
- {sel:'.fs-side .panel',title:'Your task, out in the open',text:'Declare one task when you join and mark parts done as you go. At the end you upload proof, which is checked against your task. Results are revealed once everyone has shared, and sprints without proof don\'t count.',show:()=>tourRoom('a')},
+ {sel:'.fs-side .panel',title:'Your task, out in the open',text:'Declare one task when you join and mark parts done as you go. A check-in halfway through keeps you on track.',show:()=>tourRoom('a')},
+ {sel:'.modal .drop',modal:'wrap',title:'Proof at the end of each sprint',text:"When the sprint ends, you upload proof of your work. A quick check (simulated in this prototype) summarizes the file and confirms it matches your task. Only you see the file. Without proof, the sprint won't count in your log.",show:tourWrap},
+ {sel:'.modal .reveal-list',narrow:'.modal .proof-warn',modal:'reveal',title:'Results, revealed together',text:"The session waits until everyone has shared. Then the room sees each person's result and whether their proof was checked. If someone skips proof, everyone is told, and that sprint won't count in their log.",show:tourReveal},
  {sel:'.fs-side .panel:last-child',title:'Safety built in',text:'Flag anyone who breaks the room rules, and the rest of the room votes on removing them.',show:()=>tourRoom('a')},
  {sel:'.stage',title:'Study sessions share a screen',text:'A host shares the problem set while everyone works on their own. The host role rotates each block.',show:()=>tourRoom('d')},
  {sel:'#qpanel',title:'Talk in turns',text:'In the discussion round, raise your hand to join the queue. Your mic turns on only for your own turn.',show:()=>tourRoom('d')},
@@ -23,11 +25,18 @@ let tourI=null,tourSaved=null,tourTimer=null;
 function tourGo(p){if(page!==p)go(p);}
 function tourSignIn(){verified=verified||TOUR_EMAIL;consented=true;}
 function tourRoom(id){
-  tourSignIn();
+  tourSignIn();if(S===tourSaved.S)S=null; // the tour uses its own sessions and leaves the visitor's alone
   if(S&&S.room&&S.room.id===id&&!S.ended)tourGo(S.kind==='study'?'ssession':'fsession');else quickJoin(id);
-  if(S!==tourSaved.S)S.autoChecked=true; // no check-in popping up mid-tour
+  S.autoChecked=true; // no check-in popping up mid-tour
 }
-function tourTarget(sel){return [...document.querySelectorAll(sel)].find(e=>e.getClientRects().length);}
+/* Demo wrap-up and reveal: shown as dialogs only, nothing is written to the log. */
+function tourWrap(){tourRoom('a');wrapPick='Completed';S.proof={stage:'done',pct:100,file:`${slug(S.task)}.jpg`,kind:'Photo of handwritten notes'};modalName='wrap';renderModal();}
+function tourReveal(){
+  tourRoom('a');const rows=peerRows(),skip=rows.filter(x=>x.proof)[1];if(skip)skip.proof=false;
+  rows.push({you:true,name:'You',task:S.task,result:'Completed',shared:true,proof:true});
+  S.results={rows,goal:[rows.filter(x=>x.result==='Completed').length,rows.length],revealed:true};modalName='reveal';renderModal();
+}
+function tourTarget(st){const sel=innerWidth<=650&&st.narrow||st.sel;return sel&&[...document.querySelectorAll(sel)].find(e=>e.getClientRects().length);} // narrow: smaller target on phones
 function tourInert(on){document.querySelectorAll('body > *:not(#tour):not(script)').forEach(e=>e.inert=on);}
 
 function startTour(){
@@ -44,32 +53,36 @@ function startTour(){
 function tourStep(d){tourI=Math.max(0,Math.min(TOUR.length-1,tourI+d));tourShow();}
 function tourShow(){
   const st=TOUR[tourI],last=tourI===TOUR.length-1,n=TOUR.length-2;
-  if(st.show)st.show();closeModal();
+  closeModal();if(st.show)st.show();
   const kicker=tourI===0?'Quick tour':last?'Tour complete':`Step ${tourI} of ${n}`;
   const foot=tourI===0?`<button class="tour-skip" onclick="endTour('welcome')">Skip, I'll explore</button>${btn('Start the tour','tourStep(1)','btn-primary','data-primary')}`
     :last?`<div class="end">${btn('Open the feature map',"endTour('map')",'btn-primary','data-primary')}${btn('Explore on my own',"endTour('welcome')",'btn-outline')}<button class="tour-skip" onclick="tourStep(-1)">Back</button></div>`
     :`<button class="tour-skip" onclick="endTour('welcome')">Skip tour</button><div style="display:flex;gap:8px">${btn('Back','tourStep(-1)','btn-light btn-sm')}${btn(tourI===n?'Finish':'Next','tourStep(1)','btn-primary btn-sm','data-primary')}</div>`;
   const card=document.querySelector('#tour .tour-card');
   card.innerHTML=`<div class="tour-body"><div class="kicker">${kicker}</div><h3 id="tourTitle">${st.title}</h3><p id="tourText">${st.text}</p>${tourI&&!last?`<div class="tour-progress"><div style="width:${tourI/n*100}%"></div></div>`:''}<div class="tour-foot">${foot}</div></div>`;
-  const el=st.sel&&tourTarget(st.sel);if(el)tourScroll(el,card.offsetHeight);
+  const el=tourTarget(st);if(el)tourScroll(el,card.offsetHeight);
   tourPlace();card.querySelector('[data-primary]').focus({preventScroll:true});
 }
 function tourScroll(el,ch){
+  if(el.closest('.overlay')){el.scrollIntoView({block:'nearest'});return;} // inside a dialog: scroll the dialog, not the page
   if(el.closest('.site-header,.tabbar'))return;
   const r=el.getBoundingClientRect(),head=document.querySelector('.site-header').getBoundingClientRect().bottom;
   const want=Math.max(head+16,(window.innerHeight-(r.height+30+ch))/2); // target plus card, centered, below the sticky header
   window.scrollTo(0,window.scrollY+r.top-want);
 }
 function tourPlace(){
-  const root=document.getElementById('tour');if(!root)return;if(modalName)closeModal();
-  const spot=root.querySelector('.tour-spot'),card=root.querySelector('.tour-card'),st=TOUR[tourI],el=st.sel&&tourTarget(st.sel);
+  const root=document.getElementById('tour');if(!root)return;if(modalName&&modalName!==TOUR[tourI].modal)closeModal();
+  const spot=root.querySelector('.tour-spot'),card=root.querySelector('.tour-card'),st=TOUR[tourI],el=tourTarget(st);card.style.width='';
   const vw=document.documentElement.clientWidth,vh=window.innerHeight,cw=card.offsetWidth,ch=card.offsetHeight,m=12;let x,y;
   if(!el){spot.classList.remove('on');Object.assign(spot.style,{left:vw/2+'px',top:vh/2+'px',width:'0px',height:'0px'});x=(vw-cw)/2;y=(vh-ch)/2;}
   else{
     const r=el.getBoundingClientRect(),p=8,t=Math.max(0,r.top-p),b=Math.min(vh,r.bottom+p),l=Math.max(0,r.left-p),rt=Math.min(vw,r.right+p);
     spot.classList.add('on');Object.assign(spot.style,{left:l+'px',top:t+'px',width:Math.max(0,rt-l)+'px',height:Math.max(0,b-t)+'px'});
-    y=b+14+ch<=vh-m?b+14:t-14-ch>=m?t-14-ch:vh-ch-m; // below, else above, else pinned to the bottom
     x=Math.min(Math.max(m,(l+rt)/2-cw/2),vw-cw-m);
+    if(b+14+ch<=vh-m)y=b+14;else if(t-14-ch>=m)y=t-14-ch; // below, else above
+    else if(Math.max(vw-rt,l)-14-m>=260){const right=vw-rt>=l,w=Math.min(cw,(right?vw-rt:l)-14-m);card.style.width=w+'px';const h=card.offsetHeight; // else beside, narrowed to fit
+      x=right?rt+14:l-14-w;y=Math.min(Math.max(m,(t+b)/2-h/2),vh-h-m);}
+    else y=vh-ch-m; // else pinned to the bottom
   }
   card.style.left=x+'px';card.style.top=Math.max(m,y)+'px';
 }
