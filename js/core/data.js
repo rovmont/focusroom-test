@@ -21,12 +21,12 @@ rooms.forEach(r=>r.resources=[{t:r.kind==='study'?'Shared problem set':'Pomodoro
 
 let verified=false,consented=false,page='welcome',S=null,filterTag='All',showTiers=true,pendingAfter=null,modalName='';
 let profile={color:'av-you',acc:'',plus:false};
-let wrapPick='',proofName='',proofUrl='',flagPick='',voteState=null,checkPick='',reactTarget=null,leaveTo='';
+let wrapPick='',flagPick='',voteState=null,checkPick='',reactTarget=null,leaveTo='';
 const today=new Date();
 let log=[
  {d:-1,kind:'focus',room:'Library Sprint',task:'Read OS notes, chapter 4',result:'Completed',note:'Done with 3 of 5 sections',proof:true,min:25,active:84},
- {d:-1,kind:'study',room:'OS Scheduling Review',task:'Gantt chart drills',result:'Partially completed',note:'2 of 4 charts',proof:false,min:50,active:71},
+ {d:-1,kind:'study',room:'OS Scheduling Review',task:'Gantt chart drills',result:'Partially completed',note:'2 of 4 charts',proof:true,min:50,active:71},
  {d:-2,kind:'study',room:'Peer Study Circle',task:'Stats problem set 6',result:'Completed',note:'Finished 8 of 10',proof:true,min:40,active:78},
- {d:-3,kind:'focus',room:'Deep Work Block',task:'Draft related works',result:'Need more time',note:'1 paragraph in',proof:false,min:50,active:52},
- {d:-5,kind:'focus',room:'Library Sprint',task:'French vocab list',result:'Completed',note:'',proof:false,min:25,active:88}
+ {d:-3,kind:'focus',room:'Deep Work Block',task:'Draft related works',result:'Need more time',note:'1 paragraph in',proof:true,min:50,active:52},
+ {d:-5,kind:'focus',room:'Library Sprint',task:'French vocab list',result:'Completed',note:'',proof:true,min:25,active:88}
 ];

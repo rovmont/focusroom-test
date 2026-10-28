@@ -9,7 +9,7 @@ Built by **Byte Squad**: Stephen Co, Jose Ponciano David Jr., Joanna Hong, Rovin
 - **Focus rooms**: silent, avatar-only rooms with shared focus sprints and breaks.
 - **Study sessions**: work blocks followed by turn-based discussion, with a rotating host who shares the screen.
 - **Activity tracking**: every room shows whether each student is typing, using their cursor, idle, or away. It never records keystrokes or screen content.
-- **Accountability**: task declaration with visible progress, mid-session check-ins, wrap-ups, and results revealed together.
+- **Accountability**: task declaration with visible progress, mid-session check-ins, and wrap-ups with required proof (a simulated upload and AI check against your task). Results are revealed once everyone has shared, and sprints shared without proof don't count in the log.
 - **Safety**: school-email sign-in, a 3-person minimum, no 1-on-1 rooms, and flag with vote-to-remove.
 
 ## Running it
@@ -31,12 +31,14 @@ css/                Loaded in order; later files deliberately override earlier o
   rooms-v3.css        Focus room and study session screens, consent sheet
   glass.css           v3.3 liquid-glass material, floating tab bar
   controls.css        v3.4 single control style
+  proof.css           Proof upload, check, and reveal badges
   tour.css            Guided tour spotlight and card
 js/                 Plain scripts sharing one global scope (inline onclick handlers rely on it)
   core/               glass refraction, icons, sample data and state, helpers, activity tracking, sound
   nav.js              Navigation, return chip, sign-in gate
   views/              welcome, room lists, log, Plus, feature map, outcome
-  session/            joining, shared desk/panel pieces, focus room, study session, phases, per-second updates
+  session/            joining, shared desk/panel pieces, focus room, study session, phases, per-second updates,
+                      simulated proof upload and check (proof.js)
   modals/             modal templates (render.js) and their actions (actions.js)
   tour.js             Guided tour shown on every visit (styles in css/tour.css); replay it from the feature map
   main.js             Clock, top-level render(), boot. Must stay the last script

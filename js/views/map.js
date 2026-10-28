@@ -9,9 +9,10 @@ const FEATURES={
   ['3-person minimum','Thesis Writing Hour waits for a third student.',"quickJoin('e')"],
   ['Synchronized timers','Late joiners end at the same time.',"quickJoin('a')"],
   ['Task declaration with visible progress','Every desk shows the task and parts done.',"quickJoin('a')"],
+  ['Proof required at wrap-up','Upload proof. A simulated check compares it with your task.',"quickJoin('a',()=>openModal('wrap'))"],
   ['Flag and vote-to-remove','Flag, then watch the room vote.',"quickJoin('a',()=>openModal('flag'))"]],
  should:[
-  ['Shared start, break, and results','Ready check, break together, reveal together.',"quickJoin('e')"],
+  ['Shared start, break, and results','Ready check, break together, reveal once everyone shares.',"quickJoin('e')"],
   ['Silent reactions',"Tap a classmate's desk.","quickJoin('a',()=>openReact(0))"],
   ['Avatar states and left-early','Idle, away, on break, left early.',"quickJoin('b')"],
   ['Room goal meter','Tasks done by the whole room.',"quickJoin('a')"],
@@ -24,7 +25,6 @@ const FEATURES={
   ['Optional camera in labeled study sessions','Only where the room allows it.',"quickJoin('d')"],
   ['Resource and link drawer','Share links with the room.',"quickJoin('c')"],
   ['Subject-specific sessions','Create your own room.',"startDemo(()=>openCreate('study'))"],
-  ['Optional private proof upload','Attach proof at wrap-up.',"quickJoin('a',()=>openModal('wrap'))"],
   ['Streak and activity log','Private history with active time.',"go('log')"],
   ['Premium tier','Avatar style, reserved rooms, extra stats.',"go('plus')"]],
  wont:[

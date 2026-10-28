@@ -8,15 +8,16 @@ function startVote(){voteState={who:flagPick,why:document.getElementById('flagWh
 function castVote(yes){const v=voteState;v.mine=true;if(yes)v.yes++;renderModal();const others=S.peers.filter(p=>!p.left&&p.name!==v.who).length;let i=0;
   const stepV=()=>{if(modalName!=='vote')return;if(i<others){if(yes||i<Math.floor(others/2))v.yes++;i++;renderModal();setTimeout(stepV,650);}else{v.done=true;v.removed=v.yes>(others+1)/2;if(v.removed){S.peers=S.peers.filter(p=>p.name!==v.who);S.queue=S.queue.filter(q=>q.name!==v.who);if(S.host===v.who)S.host='You';}renderModal();}};
   setTimeout(stepV,650);}
-function pickProof(inp){const f=inp.files&&inp.files[0];if(!f)return;proofName=f.name;proofUrl='';if(f.type.startsWith('image/')){try{proofUrl=URL.createObjectURL(f);}catch(e){}}renderModal();}
-function finish(){
+function finish(withProof){
   const r=S.room;log.forEach(l=>l.fresh=false);
-  log.push({d:0,kind:S.kind,room:r.name,task:S.task,result:wrapPick,note:S.check?.note||'',proof:!!proofName,proofName,min:r.len,active:pct(),fresh:true});
+  log.push({d:0,kind:S.kind,room:r.name,task:S.task,result:wrapPick,note:S.check?.note||'',proof:withProof,proofName:withProof?S.proof.file:'',uncounted:!withProof,min:r.len,active:pct(),fresh:true});
   if(wrapPick==='Completed')S.done=S.total;
-  const rows=S.peers.map(p=>({name:p.name,ini:p.ini,color:p.color,task:p.task,result:p.left?'Left early':p.fin?'Completed':p.done/p.total>=.5?'Partially completed':'Need more time'}));
-  rows.push({you:true,name:'You',task:S.task,result:wrapPick});
+  const rows=S.peers.map(p=>({name:p.name,ini:p.ini,color:p.color,task:p.task,result:p.left?'Left early':p.fin?'Completed':p.done/p.total>=.5?'Partially completed':'Need more time',shared:p.left,proof:!p.left}));
+  // One classmate skips proof in the first wrap-up of a session, then now and then, so the warning shows up in the demo
+  const active=rows.filter(x=>!x.shared);if(active.length>=2&&(!S.skipShown||Math.random()<.35)){active[rand(active.length)].proof=false;S.skipShown=true;}
+  rows.push({you:true,name:'You',task:S.task,result:wrapPick,shared:true,proof:withProof});
   S.results={rows,goal:[rows.filter(x=>x.result==='Completed').length,rows.length]};
-  openModal('reveal');
+  openModal('reveal');waitForRoom();
 }
 function endAfterReveal(){if(S.room.youCounted){S.room.count--;S.room.youCounted=false;}S.ended=true;setAmbient('off');go('outcome');}
 function createRoom(e){e&&e.preventDefault&&e.preventDefault();const k=createKind;const name=document.getElementById('cName').value.trim()||'My study room';
